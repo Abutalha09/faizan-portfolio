@@ -1134,7 +1134,20 @@
        RESPONSIVE
     ═══════════════════════════════════════════════ */
     @media (max-width: 960px) {
-      nav { grid-template-columns: 1fr auto; padding: 1.2rem 1.5rem; }
+      nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.2rem 1.5rem;
+      }
+      .nav-left {
+        display: flex;
+      }
+      .nav-logo {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+      }
       .nav-right { display: none; }
       .nav-toggle { display: flex; }
       .mobile-menu { display: flex; }
@@ -1154,10 +1167,11 @@
       .hero-ig-bg { width: clamp(300px, 80vw, 600px); }
 
       .about-grid { grid-template-columns: 1fr; gap: 3rem; }
-      .about-portrait { aspect-ratio: 4/3; }
+      .about-portrait { aspect-ratio: 1/1; }
 
       .project-card { grid-template-columns: 1fr; min-height: auto; direction: ltr !important; }
-      .project-card-media { height: 240px; }
+      .project-card-info { padding: 1.5rem; }
+      .project-card-media { height: 280px; order: -1; }
       .project-card:nth-child(even) { direction: ltr; }
 
       .ig-layout { grid-template-columns: 1fr; }
@@ -1171,10 +1185,15 @@
     }
 
     @media (max-width: 640px) {
+      .nav-left { display: none; }
+      .nav-logo {
+        position: static;
+        transform: none;
+        text-align: left;
+      }
       .mega-heading { font-size: clamp(3rem, 22vw, 8rem); }
       .contact-headline { font-size: clamp(3rem, 18vw, 7rem); }
-      .ig-dash-grid { grid-template-columns: 1fr; }
-      .about-facts { grid-template-columns: 1fr; }
+      .about-facts { grid-template-columns: repeat(2, 1fr); }
       .reels-grid { grid-template-columns: repeat(2, 1fr); gap: 0.8rem; }
       .reel-card { border-radius: 12px; }
       .reels-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
@@ -1197,6 +1216,7 @@
     <a href="#work" class="mob-link">Work</a>
     <a href="#instagram" class="mob-link">Instagram</a>
     <a href="#contact" class="mob-link">Contact</a>
+    <a href="#contact" class="nav-cta-btn mob-link" style="margin-top: 1.5rem; padding: 0.8rem 2rem; font-size: 0.85rem;">DM for Collab</a>
   </div>
 
   <!-- NAV -->
@@ -1794,10 +1814,9 @@
 
       let activeIndex = 0;
       let isAnimating = false;
-      let isMobile = window.innerWidth < 640;
       let autoTimer = null;
 
-      window.addEventListener('resize', () => { isMobile = window.innerWidth < 640; applyRoles(); });
+      window.addEventListener('resize', () => { applyRoles(); });
 
       function getRoles(idx) {
         return {
@@ -1810,31 +1829,67 @@
 
       function applyRoles() {
         const roles = getRoles(activeIndex);
+        const w = window.innerWidth;
+        
+        let centerScale = 1.45;
+        let centerHeight = '80%';
+        let centerBottom = '0';
+        let sideHeight = '32%';
+        let sideBottom = '8%';
+        let sideLeftOffset = '25%';
+        let sideRightOffset = '75%';
+        let backHeight = '24%';
+        let backBottom = '10%';
+
+        if (w < 640) {
+          // Phone
+          centerScale = 1.1;
+          centerHeight = '50%';
+          centerBottom = '18%';
+          sideHeight = '20%';
+          sideBottom = '26%';
+          sideLeftOffset = '10%';
+          sideRightOffset = '90%';
+          backHeight = '14%';
+          backBottom = '30%';
+        } else if (w < 1024) {
+          // Tablet
+          centerScale = 1.25;
+          centerHeight = '65%';
+          centerBottom = '8%';
+          sideHeight = '28%';
+          sideBottom = '16%';
+          sideLeftOffset = '18%';
+          sideRightOffset = '82%';
+          backHeight = '18%';
+          backBottom = '22%';
+        }
+
         items.forEach((item, i) => {
           let s = item.style;
           if (i === roles.center) {
             item.setAttribute('data-role', 'center');
             s.left   = '50%';
-            s.bottom = isMobile ? '18%' : '0';
-            s.height = isMobile ? '55%' : '80%';
-            s.transform = `translateX(-50%) scale(${isMobile ? 1.15 : 1.45})`;
+            s.bottom = centerBottom;
+            s.height = centerHeight;
+            s.transform = `translateX(-50%) scale(${centerScale})`;
             s.filter  = 'blur(0px) brightness(1)';
             s.opacity = '1';
             s.zIndex  = '20';
           } else if (i === roles.left) {
             item.setAttribute('data-role', 'left');
-            s.left   = isMobile ? '15%' : '25%';
-            s.bottom = isMobile ? '28%' : '8%';
-            s.height = isMobile ? '18%' : '32%';
+            s.left   = sideLeftOffset;
+            s.bottom = sideBottom;
+            s.height = sideHeight;
             s.transform = 'translateX(-50%) scale(1)';
             s.filter  = 'blur(2px) brightness(0.7)';
             s.opacity = '0.8';
             s.zIndex  = '10';
           } else if (i === roles.right) {
             item.setAttribute('data-role', 'right');
-            s.left   = isMobile ? '85%' : '75%';
-            s.bottom = isMobile ? '28%' : '8%';
-            s.height = isMobile ? '18%' : '32%';
+            s.left   = sideRightOffset;
+            s.bottom = sideBottom;
+            s.height = sideHeight;
             s.transform = 'translateX(-50%) scale(1)';
             s.filter  = 'blur(2px) brightness(0.7)';
             s.opacity = '0.8';
@@ -1842,8 +1897,8 @@
           } else {
             item.setAttribute('data-role', 'back');
             s.left   = '50%';
-            s.bottom = isMobile ? '30%' : '10%';
-            s.height = isMobile ? '14%' : '24%';
+            s.bottom = backBottom;
+            s.height = backHeight;
             s.transform = 'translateX(-50%) scale(1)';
             s.filter  = 'blur(4px) brightness(0.5)';
             s.opacity = '0.5';
