@@ -59,13 +59,16 @@
       --ease: cubic-bezier(0.16, 1, 0.3, 1);
     }
 
+    html, body {
+      max-width: 100%;
+      overflow-x: hidden;
+    }
     body {
       background: var(--bg);
       color: var(--cream);
       font-family: var(--sans);
       font-weight: 400;
       line-height: 1.6;
-      overflow-x: hidden;
     }
 
     /* ── RADIAL GLOW BACKGROUNDS ── */
@@ -1191,9 +1194,16 @@
         transform: none;
         text-align: left;
       }
-      .mega-heading { font-size: clamp(3rem, 22vw, 8rem); }
-      .contact-headline { font-size: clamp(3rem, 18vw, 7rem); }
+      .pitch-headline {
+        font-size: clamp(1.8rem, 10vw, 3.2rem);
+        line-height: 1.05;
+        margin-bottom: 2.5rem;
+      }
+      .mega-heading { font-size: clamp(2rem, 14vw, 4.2rem); }
+      .contact-headline { font-size: clamp(2.2rem, 14vw, 4.2rem); }
       .about-facts { grid-template-columns: repeat(2, 1fr); }
+      .ig-dash-cell { padding: 1rem 0.8rem; }
+      .ig-dash-num { font-size: 1.8rem; }
       .reels-grid { grid-template-columns: repeat(2, 1fr); gap: 0.8rem; }
       .reel-card { border-radius: 12px; }
       .reels-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
